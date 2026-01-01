@@ -14,6 +14,7 @@ public static class SettingsManager
 
     private static readonly object _lock = new();
     private static TranslationSettings? _instance;
+    private static readonly TranslationSettingsContext _jsonContext = TranslationSettingsContext.Default;
 
     public static TranslationSettings Instance
     {
@@ -37,7 +38,7 @@ public static class SettingsManager
             if (File.Exists(SettingsPath))
             {
                 var json = File.ReadAllText(SettingsPath);
-                return JsonSerializer.Deserialize<TranslationSettings>(json) ?? new TranslationSettings();
+                return JsonSerializer.Deserialize(json, _jsonContext.TranslationSettings) ?? new TranslationSettings();
             }
         }
         catch (Exception ex)
@@ -59,7 +60,7 @@ public static class SettingsManager
                     Directory.CreateDirectory(directory);
                 }
 
-                var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerializer.Serialize(settings, _jsonContext.TranslationSettings);
                 File.WriteAllText(SettingsPath, json);
                 _instance = settings;
             }

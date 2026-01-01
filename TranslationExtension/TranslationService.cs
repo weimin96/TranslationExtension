@@ -56,7 +56,7 @@ public class TranslationService
         
         // 随机数
         Random rd = new Random();
-        string salt = rd.Next(10000, 99999).ToString();
+        string salt = rd.Next(10000, 99999).ToString(System.Globalization.CultureInfo.InvariantCulture);
         
         // 计算签名：sign = md5(appid + q + salt + secretKey)
         string sign = MD5Encrypt(appId + q + salt + secretKey);
@@ -110,17 +110,15 @@ public class TranslationService
     // 计算MD5值
     private static string MD5Encrypt(string str)
     {
-        using var md5 = System.Security.Cryptography.MD5.Create();
-        // 将字符串转换成字节数组
         var byteOld = System.Text.Encoding.UTF8.GetBytes(str);
         // 调用加密方法
-        var byteNew = md5.ComputeHash(byteOld);
+        var byteNew = System.Security.Cryptography.MD5.HashData(byteOld);
         // 将加密结果转换为字符串
         var sb = new StringBuilder();
         foreach (var b in byteNew)
         {
             // 将字节转换成16进制表示的字符串
-            sb.Append(b.ToString("x2"));
+            sb.Append(b.ToString("x2", System.Globalization.CultureInfo.InvariantCulture));
         }
         return sb.ToString();
     }    

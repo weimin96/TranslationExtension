@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Assets\Square150x150Logo.png" />
+    <Content Include="Assets\Square44x44Logo.png" />
+    <Content Include="Assets\Wide310x150Logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +58,7 @@
 
   <PropertyGroup>
     <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>false</PublishReadyToRun>
     <IsAotCompatible>true</IsAotCompatible>
 
     <CsWinRTAotOptimizerEnabled>true</CsWinRTAotOptimizerEnabled>
@@ -64,6 +69,8 @@
     <!-- When publishing trimmed, make sure to treat trimming warnings as build errors -->
     <ILLinkTreatWarningsAsErrors>true</ILLinkTreatWarningsAsErrors>
     <DefaultLanguage>zh-cn</DefaultLanguage>
+    <PackageCertificateKeyFile>..\TranslationExtension.pfx</PackageCertificateKeyFile>
+    <PackageCertificatePassword>1234</PackageCertificatePassword>
 
   </PropertyGroup>
 

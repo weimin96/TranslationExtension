@@ -16,7 +16,6 @@ internal sealed partial class TranslationExtensionPage : DynamicListPage, IDispo
     private List<ListItem> _allItems = new();
     private string _currentSearch = string.Empty;
     private System.Threading.CancellationTokenSource? _cts;
-    private Task<string>? _translationTask;
 
     public TranslationExtensionPage()
     {
