@@ -1,63 +1,91 @@
-# TranslationExtension (PowerToys翻译扩展)
+# TranslationExtension (PowerToys 翻译扩展)
 
-这是一个基于 PowerToys 的翻译扩展工具，旨在为用户提供便捷的文本翻译功能。目前支持百度翻译 API。
+<div align="center">
 
-## ✨ 主要功能
+![License](https://img.shields.io/github/license/weimin96/TranslationExtension)
+![Dotnet Version](https://img.shields.io/badge/.NET-9.0-blue?style=flat-square&logo=dotnet)
+![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?style=flat-square&logo=windows)
+![Stars](https://img.shields.io/github/stars/weimin96/TranslationExtension?style=flat-square)
+![Issues](https://img.shields.io/github/issues/weimin96/TranslationExtension?style=flat-square)
+![Forks](https://img.shields.io/github/forks/weimin96/TranslationExtension?style=flat-square)
 
-*   **多源支持**：目前内置支持 **百度翻译**，架构上支持扩展更多翻译源（如 Google 翻译等）。
-*   **配置管理**：提供统一的设置页面，方便用户配置 API 密钥和其他选项。
-*   **自动检测**：支持中英互译（自动检测源语言）。
-*   **Windows 原生体验**：基于 .NET 9 和 Windows App SDK 构建，提供流畅的 Windows 原生应用体验。
+</div>
 
-## 🛠️ 环境要求
+这是一个专为 PowerToys 深度定制的翻译扩展工具。它旨在无缝集成到 Windows 工作流中，为开发者提供极速、简洁且高效的文本翻译体验。
 
-*   Windows 10 version 19041.0 或更高版本
-*   [Visual Studio 2022](https://visualstudio.microsoft.com/)
-*   .NET 9.0 SDK
+---
 
-## 🚀 快速开始
+## 🚀 核心特性
 
-1.  **克隆项目**
-    ```powershell
-    git clone https://github.com/yourusername/TranslationExtension.git
-    cd TranslationExtension
-    ```
+- **⚡ 极速响应**：基于 .NET 9 高性能运行时，翻译请求毫秒级响应。
+- **🧩 PowerToys 集成**：深度适配 PowerToys 插件体系，呼之即来，挥之即去。
+- **🤖 智能感应**：支持中英文自动检测与互译，无需手动切换源语言。
+- **⚙️ 灵活配置**：内置统一的设置面板，支持多种 API 凭证管理（目前已完善支持百度翻译）。
+- **🎨 现代 UI**：采用 WinUI 3 框架，完美融入 Windows 11 设计风格，支持深色/浅色模式。
 
-2.  **打开项目**
-    使用 Visual Studio 打开 `TranslationExtension.sln` 解决方案文件。
+## 🛠️ 技术栈
 
-3.  **构建与运行**
-    *   确保已安装所需的 Windows App SDK workload。
-    *   将 `TranslationExtension` 设为启动项目。
-    *   按 `F5` 运行或构建项目。
+- **语言**: [C# 13](https://learn.microsoft.com/dotnet/csharp/)
+- **框架**: [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
+- **UI 框架**: [Windows App SDK / WinUI 3](https://learn.microsoft.com/windows/apps/winui/winui3/)
+- **API 集成**: RESTful API (HttpClient)
 
-## ⚙️ 配置说明
+## 📥 环境要求
 
-在使用翻译功能之前，您需要配置相应的翻译服务提供商凭证。
+- **操作系统**: Windows 10 version 19041.0 或更高版本
+- **开发工具**: [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (需安装 "Windows 应用程序开发" 工作负荷)
+- **运行时**: [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 
-### 百度翻译配置
+## 🏎️ 快速开始
 
-1.  访问 [百度翻译开放平台](http://api.fanyi.baidu.com/) 并注册账号。
-2.  开通通用翻译 API 服务，获取您的 `App ID` 和 `密钥 (Secret Key)`。
-3.  运行本扩展程序，进入 **设置 (Settings)** 页面。
-4.  在提供商列表中选择 **Baidu**。
-5.  在对应的输入框中填入您的 App ID 和 Secret Key。
-6.  保存设置即可开始使用。
+### 1. 克隆代码仓库
+```powershell
+git clone https://github.com/weimin96/TranslationExtension.git
+cd TranslationExtension
+```
 
-## 📁 目录结构
+### 2. 编译与运行
+- 使用 Visual Studio 2026 打开 `TranslationExtension.sln`。
+- 确认已解决 NuGet 依赖。
+- 将 `TranslationExtension` 设为 **启动项目**。
+- 按 `F5` 启动调试，或通过 `生成 > 发布` 进行打包。
 
-*   **TranslationExtension/**: 核心项目代码
-    *   **Pages/**: UI 页面 (TranslationExtensionPage, SettingsPage 等)
-    *   **Properties/**: 项目属性
-    *   **Assets/**: 静态资源文件
-    *   **TranslationService.cs**: 翻译服务核心逻辑
-    *   **TranslationSettings.cs**: 设置模型定义
-    *   **SettingsManager.cs**: 设置存储与管理
+## ⚙️ 翻译提供商配置
 
-## 🤝 贡献
+在使用翻译功能之前，需要至设置页面配置服务商凭证：
 
-欢迎提交 Issues 和 Pull Requests 来改进这个项目！
+### 百度翻译 (Baidu)
+1. 注册并登录 [百度翻译开放平台](http://api.fanyi.baidu.com/)。
+2. 在 **开发者信息** 中获取您的 `App ID` 和 `Secret Key`。
+3. 打开本扩展的 **Settings (设置)** 页面。
+4. 选择 **Baidu** 提供商，填入对应的凭证并保存。
 
-## 📄 许可证
+> [!TIP]
+> 百度翻译为新用户提供一定额度的每月免费调用字数，适合个人开发者使用。
 
-本项目采用 MIT 许可证。
+## 📂 项目结构
+
+```text
+TranslationExtension/
+├── TranslationExtension/          # 核心插件逻辑
+│   ├── Assets/                    # 图标与静态资源
+│   ├── Pages/                     # WinUI 页面 (设置与主界面)
+│   ├── TranslationService.cs      # API 请求核心逻辑
+│   ├── TranslationSettings.cs     # 配置模型定义
+│   └── SettingsManager.cs         # 本地持久化管理
+├── Directory.Build.props          # 全局构建配置
+└── TranslationExtension.sln       # 解决方案入口
+```
+
+## 🤝 参与贡献
+
+我们非常欢迎来自社区的贡献！
+1. Fork 本仓库。
+2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)。
+3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
+4. 推送到分支 (`git push origin feature/AmazingFeature`)。
+5. 开启一个 Pull Request。
+
+## 📄 开源协议
+
+本项目基于 **MIT** 协议开源。详情请参阅 [LICENSE](LICENSE) 文件。
