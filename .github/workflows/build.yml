@@ -60,12 +60,14 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: download-artifacts
 
       - name: Prepare assets
         run: |
           mkdir release-assets
-          find artifacts -name "*.msix" -exec cp {} release-assets/ \;
+          # Recursively find and copy all msix files from the downloaded artifacts
+          find download-artifacts -name "*.msix" -exec cp {} release-assets/ \;
+          echo "Assets prepared:"
           ls -R release-assets/
 
       - name: Create Release

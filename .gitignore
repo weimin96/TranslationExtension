@@ -106,3 +106,5 @@ _ReSharper*/
 
 .azure/
 iisexpress/
+
+TranslationExtension/AppPackages/
