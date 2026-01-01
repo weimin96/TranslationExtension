@@ -1,0 +1,49 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration: [Release]
+        platform: [x64, arm64]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore dependencies
+      run: dotnet restore TranslationExtension.sln
+
+    - name: Build
+      run: |
+        msbuild TranslationExtension\TranslationExtension.csproj `
+          /p:Configuration=${{ matrix.configuration }} `
+          /p:Platform=${{ matrix.platform }} `
+          /p:PublishProfile=win-${{ matrix.platform }}.pubxml `
+          /p:AppxBundle=Always `
+          /p:AppxBundlePlatforms="${{ matrix.platform }}" `
+          /p:UapAppxPackageBuildMode=SideloadOnly
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: TranslationExtension-${{ matrix.platform }}-${{ matrix.configuration }}
+        path: TranslationExtension/AppPackages/

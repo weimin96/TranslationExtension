@@ -2,6 +2,7 @@
 
 <div align="center">
 
+![Build Status](https://github.com/weimin96/TranslationExtension/actions/workflows/build.yml/badge.svg)
 ![License](https://img.shields.io/github/license/weimin96/TranslationExtension)
 ![Dotnet Version](https://img.shields.io/badge/.NET-9.0-blue?style=flat-square&logo=dotnet)
 ![Platform](https://img.shields.io/badge/Platform-Windows-0078D4?style=flat-square&logo=windows)
