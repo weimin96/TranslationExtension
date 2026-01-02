@@ -22,6 +22,7 @@ internal sealed partial class SettingsPage : ContentPage
         var providers = new List<ChoiceSetSetting.Choice>
         {
             new("Baidu Translate", "Baidu"),
+            new("DeepSeek", "DeepSeek"),
             //new("Google Translate", "Google")
         };
         _settingsForm.Add(new ChoiceSetSetting("Provider", providers)
@@ -41,6 +42,13 @@ internal sealed partial class SettingsPage : ContentPage
         {
             Label = "Baidu Secret Key",
             Description = "输入百度翻译 API 密钥"
+        });
+
+        // DeepSeek Settings
+        _settingsForm.Add(new TextSetting("DeepSeekApiKey", _appSettings.DeepSeekApiKey)
+        {
+            Label = "DeepSeek API Key",
+            Description = "输入 DeepSeek API 密钥"
         });
 
         // Google Settings
@@ -68,6 +76,7 @@ internal sealed partial class SettingsPage : ContentPage
 
         _appSettings.BaiduAppId = args.GetSetting<string>("BaiduAppId") ?? string.Empty;
         _appSettings.BaiduSecretKey = args.GetSetting<string>("BaiduSecretKey") ?? string.Empty;
+        _appSettings.DeepSeekApiKey = args.GetSetting<string>("DeepSeekApiKey") ?? string.Empty;
         //_appSettings.GoogleApiKey = args.GetSetting<string>("GoogleApiKey") ?? string.Empty;
 
         SettingsManager.Save(_appSettings);

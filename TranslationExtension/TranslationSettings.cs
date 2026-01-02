@@ -5,7 +5,8 @@ namespace TranslationExtension;
 public enum TranslationProvider
 {
     Baidu,
-    Google
+    Google,
+    DeepSeek
 }
 
 public class TranslationSettings
@@ -21,4 +22,7 @@ public class TranslationSettings
 
     // Google Settings
     public string GoogleApiKey { get; set; } = string.Empty;
+
+    // DeepSeek Settings
+    public string DeepSeekApiKey { get; set; } = string.Empty;
 }
