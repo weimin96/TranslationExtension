@@ -84,27 +84,12 @@ internal sealed partial class TranslationExtensionPage : DynamicListPage, IDispo
             if (token.IsCancellationRequested) return;
 
             var result = await TranslationService.TranslateAsync(trimmed, prompt);
-            
+
             if (!token.IsCancellationRequested && !string.IsNullOrEmpty(result))
             {
                 // Update UI on completion
                 _allItems.Clear();
-                _allItems.Add(new ListItem(new AnonymousCommand(() => 
-                {
-                   var dataPackage = new Windows.ApplicationModel.DataTransfer.DataPackage();
-                   dataPackage.SetText(result);
-                   Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
-                }))
-                {
-                    Title = result,
-                    Subtitle = $"{directionLabel}: {trimmed}",
-                    Icon = new IconInfo("\uE930"), // Checkmark/Completed
-                    Details = new Details 
-                    { 
-                        Title = "翻译结果", 
-                        Body = result 
-                    }
-                });
+                _allItems.Add(CreateResultItem(result, trimmed, directionLabel));
                 RaiseItemsChanged(_allItems.Count);
             }
         }
@@ -116,16 +101,33 @@ internal sealed partial class TranslationExtensionPage : DynamicListPage, IDispo
         {
             if (!token.IsCancellationRequested)
             {
-                 _allItems.Clear();
+                _allItems.Clear();
                 _allItems.Add(new ListItem(new NoOpCommand())
                 {
-                    Title = "Error",
+                    Title = "翻译失败",
                     Subtitle = ex.Message,
                     Icon = new IconInfo("\uE711")
                 });
                 RaiseItemsChanged(_allItems.Count);
             }
         }
+    }
+
+    private ListItem CreateResultItem(string result, string original, string directionLabel)
+    {
+        var item = new ListItem(new CopyTextCommand(result))
+        {
+            Title = result,
+            Subtitle = $"{directionLabel}: {original}  (双击复制)",
+            Icon = new IconInfo("\uE8C8"), // Copy icon
+            Details = new Details
+            {
+                Title = "翻译结果",
+                Body = result
+            }
+        };
+
+        return item;
     }
     
     // --- Helper Methods ---

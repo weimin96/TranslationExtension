@@ -31,7 +31,7 @@
 - **极速响应**：基于 .NET 9 高性能运行时，翻译请求毫秒级响应。
 - **PowerToys 集成**：深度适配 PowerToys 插件体系，集成度高。
 - **智能感应**：支持中英文自动检测与互译，无需手动切换源语言。
-- **灵活配置**：内置统一的设置面板，支持多种 API 凭证管理（目前已完善支持百度翻译）。
+- **灵活配置**：内置统一的设置面板，支持多种 API 凭证管理（目前已完善支持百度翻译、DeepSeek）。
 - **现代 UI**：采用 WinUI 3 框架，完美融入 Windows 11 设计风格，支持深色/浅色模式。
 
 ## 技术栈
@@ -110,6 +110,15 @@ Get-AppxPackage TranslationExtension | Remove-AppxPackage
 
 > [!TIP]
 > 百度翻译为新用户提供一定额度的每月免费调用字数，适合个人开发者使用。
+
+### DeepSeek
+1. 注册并登录 [DeepSeek 开放平台](https://platform.deepseek.com/)。
+2. 在 **API Keys** 中创建并获取您的 `API Key`。
+3. 打开本扩展的 **Settings (设置)** 页面。
+4. 选择 **DeepSeek** 提供商，填入 `DeepSeek API Key` 并保存。
+
+> [!TIP]
+> DeepSeek 提供高性价比的 AI 翻译服务，建议开通使用。
 
 ## 项目结构
 
