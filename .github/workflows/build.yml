@@ -18,37 +18,45 @@ jobs:
         platform: [x64, arm64]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
 
-    - name: Restore dependencies
-      run: dotnet restore TranslationExtension.sln
+      - name: Restore
+        run: dotnet restore TranslationExtension.sln
 
-    - name: Build
-      run: |
-        msbuild TranslationExtension\TranslationExtension.csproj `
-          /p:Configuration=${{ matrix.configuration }} `
-          /p:Platform=${{ matrix.platform }} `
-          /p:PublishProfile=win-${{ matrix.platform }}.pubxml `
-          /p:AppxBundle=Always `
-          /p:AppxBundlePlatforms="${{ matrix.platform }}" `
-          /p:UapAppxPackageBuildMode=SideloadOnly
+      - name: Build MSIX
+        shell: pwsh
+        run: |
+          msbuild TranslationExtension/TranslationExtension.csproj `
+            /p:Configuration=${{ matrix.configuration }} `
+            /p:Platform=${{ matrix.platform }} `
+            /p:GenerateAppxPackageOnBuild=true `
+            /p:AppxBundle=Never `
+            /p:UapAppxPackageBuildMode=SideloadOnly `
+            /p:AppxPackageDir=AppPackages\${{ matrix.platform }}\
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: TranslationExtension-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: TranslationExtension/AppPackages/
+          Write-Host "Verify MSIX output"
+          Get-ChildItem AppPackages -Recurse
+
+          if (!(Get-ChildItem AppPackages -Recurse -Filter *.msix)) {
+            Write-Error "MSIX package not found!"
+          }
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TranslationExtension-${{ matrix.platform }}
+          path: AppPackages/${{ matrix.platform }}/
 
   release:
     needs: build
@@ -56,24 +64,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
-      - name: Download all artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          path: download-artifacts
+          path: artifacts
 
-      - name: Prepare assets
+      - name: Prepare release assets
         run: |
           mkdir release-assets
-          # Recursively find and copy all msix files from the downloaded artifacts
-          find download-artifacts -name "*.msix" -exec cp {} release-assets/ \;
-          echo "Assets prepared:"
-          ls -R release-assets/
+          find artifacts -name "*.msix" -exec cp {} release-assets/ \;
+          ls -R release-assets
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: release-assets/*
+          files: release-assets/*.msix
           generate_release_notes: true
-          draft: false
-          prerelease: false

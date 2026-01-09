@@ -17,7 +17,9 @@ public class TranslationService
     {
         { TranslationProvider.Baidu, new BaiduTranslationProvider() },
         { TranslationProvider.DeepSeek, new DeepSeekTranslationProvider() },
-        { TranslationProvider.Google, new GoogleTranslationProvider() }
+        { TranslationProvider.Google, new GoogleTranslationProvider() },
+        { TranslationProvider.Glm, new GlmTranslationProvider() },
+        { TranslationProvider.Minimax, new MinimaxTranslationProvider() }
     };
 
     /// <summary>

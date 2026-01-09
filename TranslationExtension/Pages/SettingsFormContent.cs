@@ -32,7 +32,12 @@ internal sealed partial class SettingsFormContent : FormContent
           "Provider": "{{SettingsManager.Instance.Provider}}",
           "BaiduAppId": "{{SettingsManager.Instance.BaiduAppId}}",
           "BaiduSecretKey": "{{SettingsManager.Instance.BaiduSecretKey}}",
-          "DeepSeekApiKey": "{{SettingsManager.Instance.DeepSeekApiKey}}"
+          "DeepSeekApiKey": "{{SettingsManager.Instance.DeepSeekApiKey}}",
+          "DeepSeekModel": "{{SettingsManager.Instance.DeepSeekModel}}",
+          "GlmApiKey": "{{SettingsManager.Instance.GlmApiKey}}",
+          "GlmModel": "{{SettingsManager.Instance.GlmModel}}",
+          "MinimaxApiKey": "{{SettingsManager.Instance.MinimaxApiKey}}",
+          "MinimaxModel": "{{SettingsManager.Instance.MinimaxModel}}"
         }
         """;
     }
@@ -76,6 +81,33 @@ internal sealed partial class SettingsFormContent : FormContent
                 SettingsManager.Instance.DeepSeekApiKey = deepSeekApiKeyElement.GetString() ?? string.Empty;
             }
 
+            if (root.TryGetProperty("DeepSeekModel", out var deepSeekModelElement))
+            {
+                SettingsManager.Instance.DeepSeekModel = deepSeekModelElement.GetString() ?? "deepseek-chat";
+            }
+
+            // 解析 GLM 配置
+            if (root.TryGetProperty("GlmApiKey", out var glmApiKeyElement))
+            {
+                SettingsManager.Instance.GlmApiKey = glmApiKeyElement.GetString() ?? string.Empty;
+            }
+
+            if (root.TryGetProperty("GlmModel", out var glmModelElement))
+            {
+                SettingsManager.Instance.GlmModel = glmModelElement.GetString() ?? "glm-4-flash";
+            }
+
+            // 解析 MiniMax 配置
+            if (root.TryGetProperty("MinimaxApiKey", out var minimaxApiKeyElement))
+            {
+                SettingsManager.Instance.MinimaxApiKey = minimaxApiKeyElement.GetString() ?? string.Empty;
+            }
+
+            if (root.TryGetProperty("MinimaxModel", out var minimaxModelElement))
+            {
+                SettingsManager.Instance.MinimaxModel = minimaxModelElement.GetString() ?? "abab6.5s-chat";
+            }
+
             // 保存设置
             SettingsManager.Save(SettingsManager.Instance);
             
@@ -94,7 +126,7 @@ internal sealed partial class SettingsFormContent : FormContent
     /// </summary>
     private static string GetTemplate()
     {
-        return """
+        return $$"""
         {
             "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
             "type": "AdaptiveCard",
@@ -129,16 +161,7 @@ internal sealed partial class SettingsFormContent : FormContent
                             "type": "Input.ChoiceSet",
                             "id": "Provider",
                             "value": "${Provider}",
-                            "choices": [
-                                {
-                                    "title": "Baidu 翻译",
-                                    "value": "Baidu"
-                                },
-                                {
-                                    "title": "DeepSeek",
-                                    "value": "DeepSeek"
-                                }
-                            ],
+                            "choices": {{TranslationDefinitions.GetChoicesJson(TranslationDefinitions.Providers)}},
                             "placeholder": "选择翻译服务商"
                         }
                     ]
@@ -196,7 +219,7 @@ internal sealed partial class SettingsFormContent : FormContent
                         },
                         {
                             "type": "TextBlock",
-                            "text": "输入 DeepSeek API 密钥",
+                            "text": "输入 DeepSeek API 密钥和模型",
                             "size": "Small",
                             "isSubtle": true,
                             "wrap": true,
@@ -209,6 +232,92 @@ internal sealed partial class SettingsFormContent : FormContent
                             "placeholder": "输入 DeepSeek API 密钥",
                             "value": "${DeepSeekApiKey}",
                             "style": "Password"
+                        },
+                        {
+                            "type": "Input.ChoiceSet",
+                            "id": "DeepSeekModel",
+                            "label": "模型",
+                            "value": "${DeepSeekModel}",
+                            "choices": {{TranslationDefinitions.GetChoicesJson(TranslationDefinitions.DeepSeekModels)}},
+                            "placeholder": "选择模型"
+                        }
+                    ]
+                },
+                {
+                    "id": "glmSettings",
+                    "type": "Container",
+                    "spacing": "Medium",
+                    "separator": true,
+                    "isVisible": true,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "GLM (智谱AI) 配置",
+                            "weight": "Bolder",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "输入智谱AI API 密钥和模型",
+                            "size": "Small",
+                            "isSubtle": true,
+                            "wrap": true,
+                            "spacing": "None"
+                        },
+                        {
+                            "type": "Input.Text",
+                            "id": "GlmApiKey",
+                            "label": "API Key",
+                            "placeholder": "输入智谱AI API 密钥",
+                            "value": "${GlmApiKey}",
+                            "style": "Password"
+                        },
+                        {
+                            "type": "Input.ChoiceSet",
+                            "id": "GlmModel",
+                            "label": "模型",
+                            "value": "${GlmModel}",
+                            "choices": {{TranslationDefinitions.GetChoicesJson(TranslationDefinitions.GlmModels)}},
+                            "placeholder": "选择模型"
+                        }
+                    ]
+                },
+                {
+                    "id": "minimaxSettings",
+                    "type": "Container",
+                    "spacing": "Medium",
+                    "separator": true,
+                    "isVisible": true,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "MiniMax 配置",
+                            "weight": "Bolder",
+                            "wrap": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "输入 MiniMax API 凭据和模型",
+                            "size": "Small",
+                            "isSubtle": true,
+                            "wrap": true,
+                            "spacing": "None"
+                        },
+                        {
+                            "type": "Input.Text",
+                            "id": "MinimaxApiKey",
+                            "label": "API Key",
+                            "placeholder": "输入 MiniMax API 密钥",
+                            "value": "${MinimaxApiKey}",
+                            "style": "Password"
+                        },
+                        {
+                            "type": "Input.ChoiceSet",
+                            "id": "MinimaxModel",
+                            "label": "模型",
+                            "value": "${MinimaxModel}",
+                            "choices": {{TranslationDefinitions.GetChoicesJson(TranslationDefinitions.MinimaxModels)}},
+                            "placeholder": "选择模型"
                         }
                     ]
                 }

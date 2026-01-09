@@ -6,7 +6,9 @@ public enum TranslationProvider
 {
     Baidu,
     Google,
-    DeepSeek
+    DeepSeek,
+    Glm,
+    Minimax
 }
 
 public class TranslationSettings
@@ -25,4 +27,13 @@ public class TranslationSettings
 
     // DeepSeek Settings
     public string DeepSeekApiKey { get; set; } = string.Empty;
+    public string DeepSeekModel { get; set; } = "deepseek-chat";
+
+    // GLM Settings
+    public string GlmApiKey { get; set; } = string.Empty;
+    public string GlmModel { get; set; } = "glm-4.7";
+
+    // MiniMax Settings
+    public string MinimaxApiKey { get; set; } = string.Empty;
+    public string MinimaxModel { get; set; } = "MiniMax-M2.1";
 }
